@@ -82,6 +82,17 @@
             opacity: 0;
             cursor: pointer;
         }
+        .promotion {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #1D1D1F;
+        }
+        .promotion a {
+            color: #007AFF;
+            font-weight: bold;
+            text-decoration: none;
+        }
         @media (max-width: 480px) {
             .container {
                 padding: 15px;
@@ -107,7 +118,13 @@
         <textarea id="resultBox" readonly placeholder="Result here..."></textarea>
         <button onclick="copyResult()">Copy</button>
     </div>
-
+    
+    <div class="promotion">
+        <h3>Other tool:</h3>
+        <p>Upload data video, trả tổng view, tổng watchtime, avg skiprate</p>
+        <a href="https://dothanhtung267.github.io/data/" target="_blank">Try it now →</a>
+    </div>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
         function generateList() {
