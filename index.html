@@ -21,8 +21,8 @@
             width: 90%;
             max-width: 400px;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             text-align: center;
         }
         h2 {
@@ -32,18 +32,20 @@
         input, button, textarea {
             width: calc(100% - 20px);
             margin: 10px auto;
-            padding: 10px;
+            padding: 12px;
             font-size: 16px;
-            border-radius: 5px;
+            border-radius: 10px;
             border: none;
             display: block;
         }
         input {
             border: 1px solid #ccc;
+            background: #F0F0F0;
         }
         textarea {
             height: 80px;
             resize: none;
+            background: #F0F0F0;
         }
         button {
             background: #34C759;
@@ -54,13 +56,35 @@
         button:hover {
             background: #30B455;
         }
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: calc(100% - 20px);
+            background: white;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+            color: #007AFF;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .file-upload input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
         @media (max-width: 480px) {
             .container {
                 padding: 15px;
             }
             input, button, textarea {
                 font-size: 14px;
-                padding: 8px;
+                padding: 10px;
             }
         }
     </style>
@@ -69,26 +93,48 @@
     <div class="container">
         <h2>List video ID cách nhau bằng dấu phẩy</h2>
         <input type="text" id="numberInput" placeholder="Điền ID format nào cũng được">
+        <label class="file-upload">
+            Chọn file Excel
+            <input type="file" id="fileInput" accept=".xls,.xlsx">
+        </label>
         <button onclick="generateList()">Generate</button>
         <textarea id="resultBox" readonly placeholder="Result here..."></textarea>
         <button onclick="copyResult()">Copy</button>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
         function generateList() {
             let input = document.getElementById("numberInput").value;
             let numbers = input.trim().split(/\s+/);
             let uniqueNumbers = [...new Set(numbers)].join(",");
-            document.getElementById("resultBox").value = uniqueNumbers;
+            document.getElementById("resultBox").value = '';
         }
 
         function copyResult() {
-    let resultBox = document.getElementById("resultBox");
-    resultBox.select();
-    document.execCommand("copy");
-    let count = resultBox.value ? resultBox.value.split(",").length : 0;
-    alert("Copied " + count + " IDs to clipboard!");
-}
+            let resultBox = document.getElementById("resultBox");
+            resultBox.select();
+            document.execCommand("copy");
+            let count = resultBox.value ? resultBox.value.split(",").length : 0;
+            alert("Copied " + count + " IDs to clipboard!");
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            let file = event.target.files[0];
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let data = new Uint8Array(e.target.result);
+                let workbook = XLSX.read(data, { type: 'array' });
+                let sheetName = workbook.SheetNames[0];
+                let sheet = workbook.Sheets[sheetName];
+                let json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                json.shift(); // Remove the first row if it contains text
+                let numbers = json.flat().filter(item => item).map(String);
+                let uniqueNumbers = [...new Set(numbers)].join(",");
+                document.getElementById("resultBox").value = uniqueNumbers;
+            };
+            reader.readAsArrayBuffer(file);
+        });
     </script>
     <p style="margin-top: 20px; font-size: 12px; color: #555;">by TungDT6</p>
 </body>
