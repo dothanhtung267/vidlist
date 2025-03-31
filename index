@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VID list</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E5E7EB;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+        }
+        .container {
+            background: #007AFF;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+        input, button, textarea {
+            width: calc(100% - 20px);
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            display: block;
+        }
+        input {
+            border: 1px solid #ccc;
+        }
+        textarea {
+            height: 80px;
+            resize: none;
+        }
+        button {
+            background: #34C759;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #30B455;
+        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            input, button, textarea {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>List video ID cách nhau bằng dấu phẩy</h2>
+        <input type="text" id="numberInput" placeholder="Điền ID format nào cũng được">
+        <button onclick="generateList()">Generate</button>
+        <textarea id="resultBox" readonly placeholder="Result here..."></textarea>
+        <button onclick="copyResult()">Copy</button>
+    </div>
+
+    <script>
+        function generateList() {
+            let input = document.getElementById("numberInput").value;
+            let numbers = input.trim().split(/\s+/);
+            let uniqueNumbers = [...new Set(numbers)].join(",");
+            document.getElementById("resultBox").value = uniqueNumbers;
+        }
+
+        function copyResult() {
+            let resultBox = document.getElementById("resultBox");
+            resultBox.select();
+            document.execCommand("copy");
+            alert("Copied to clipboard!");
+        }
+    </script>
+    <p style="margin-top: 20px; font-size: 12px; color: #555;">by TungDT6</p>
+</body>
+</html>
